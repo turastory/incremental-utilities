@@ -2,20 +2,11 @@ using BreakInfinity;
 
 class ExpressionParser
 {
-    // Input: 2 + level * 5 - 2^3
     public static Func<double, BigDouble> Parse(string input)
     {
-        // 토큰화
         var tokens = Tokenize(input);
-
-        // 파싱 트리 생성
         var ast = BuildAST(tokens);
-
-        // Lambda 표현식 생성
-        return (level) =>
-        {
-            return EvaluateAST(ast, level);
-        };
+        return (level) => EvaluateAST(ast, level);
     }
 
     private static string[] Tokenize(string input)
@@ -36,7 +27,7 @@ class ExpressionParser
     {
         var stack = new Stack<Node>();
         var operators = new Stack<string>();
-        var functionParams = new Stack<int>(); // 함수 파라미터 개수 추적
+        var functionParams = new Stack<int>();
 
         for (int i = 0; i < tokens.Length; i++)
         {
@@ -45,7 +36,7 @@ class ExpressionParser
             if (IsFunction(token))
             {
                 operators.Push(token);
-                functionParams.Push(0); // 파라미터 카운트 초기화
+                functionParams.Push(0);
             }
             else if (token == "(")
             {
@@ -57,7 +48,7 @@ class ExpressionParser
                 {
                     ProcessOperator(stack, operators.Pop());
                 }
-                operators.Pop(); // "(" 제거
+                operators.Pop();
 
                 if (operators.Count > 0 && IsFunction(operators.Peek()))
                 {
@@ -183,6 +174,6 @@ class ExpressionParser
         public string Value { get; set; }
         public Node Left { get; set; }
         public Node Right { get; set; }
-        public Node[] Parameters { get; set; } // 함수 파라미터용
+        public Node[] Parameters { get; set; }
     }
 }
