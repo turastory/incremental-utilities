@@ -1,12 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using BreakInfinity;
 
-class ExpressionParser
+public struct ParseResult
 {
-    public static Func<double, BigDouble> Parse(string input)
+    public Func<ValueRegistry, BigDouble> Function { get; set; }
+    public HashSet<string> Dependencies { get; set; }
+}
+
+public class ExpressionParser
+{
+    // Input: 2 + level * 5 - 2^3
+    public static Func<ValueRegistry, BigDouble> Parse(string input)
+    {
+        // 토큰화
+        var tokens = Tokenize(input);
+
+        // 파싱 트리 생성
+        var ast = BuildAST(tokens);
+
+        // Lambda 표현식 생성
+        return (valueRegistry) =>
+        {
+            return EvaluateAST(ast, valueRegistry);
+        };
+    }
+
+    public static ParseResult ParseWithDependencies(string input)
     {
         var tokens = Tokenize(input);
         var ast = BuildAST(tokens);
-        return (level) => EvaluateAST(ast, level);
+        var dependencies = new HashSet<string>();
+
+        // 의존성 수집
+        CollectDependencies(ast, dependencies);
+
+        return new ParseResult
+        {
+            Function = (valueRegistry) => EvaluateAST(ast, valueRegistry),
+            Dependencies = dependencies,
+        };
     }
 
     private static string[] Tokenize(string input)
@@ -27,7 +61,7 @@ class ExpressionParser
     {
         var stack = new Stack<Node>();
         var operators = new Stack<string>();
-        var functionParams = new Stack<int>();
+        var functionParams = new Stack<int>(); // 함수 파라미터 개수 추적
 
         for (int i = 0; i < tokens.Length; i++)
         {
@@ -36,7 +70,7 @@ class ExpressionParser
             if (IsFunction(token))
             {
                 operators.Push(token);
-                functionParams.Push(0);
+                functionParams.Push(0); // 파라미터 카운트 초기화
             }
             else if (token == "(")
             {
@@ -48,7 +82,7 @@ class ExpressionParser
                 {
                     ProcessOperator(stack, operators.Pop());
                 }
-                operators.Pop();
+                operators.Pop(); // "(" 제거
 
                 if (operators.Count > 0 && IsFunction(operators.Peek()))
                 {
@@ -137,19 +171,24 @@ class ExpressionParser
             _ => 0,
         };
 
-    private static BigDouble EvaluateAST(Node node, double level)
+    private static BigDouble EvaluateAST(Node node, ValueRegistry valueRegistry)
     {
         if (node == null)
             return 0;
 
-        if (node.Value == "level")
-            return level;
+        // 숫자인 경우
         if (double.TryParse(node.Value, out double number))
             return number;
 
+        // 연산자나 함수가 아닌 문자열인 경우 valueRegistry에서 값을 가져옴
+        if (!IsOperator(node.Value) && !IsFunction(node.Value) && node.Parameters == null)
+            return valueRegistry.GetValue(node.Value).GetValue(valueRegistry);
+
         if (node.Parameters != null)
         {
-            var evaluatedParams = node.Parameters.Select(p => EvaluateAST(p, level)).ToArray();
+            var evaluatedParams = node
+                .Parameters.Select(p => EvaluateAST(p, valueRegistry))
+                .ToArray();
             return node.Value switch
             {
                 "min" => evaluatedParams.Min(),
@@ -160,13 +199,46 @@ class ExpressionParser
 
         return node.Value switch
         {
-            "+" => EvaluateAST(node.Left, level) + EvaluateAST(node.Right, level),
-            "-" => EvaluateAST(node.Left, level) - EvaluateAST(node.Right, level),
-            "*" => EvaluateAST(node.Left, level) * EvaluateAST(node.Right, level),
-            "/" => EvaluateAST(node.Left, level) / EvaluateAST(node.Right, level),
-            "^" => BigDouble.Pow(EvaluateAST(node.Left, level), EvaluateAST(node.Right, level)),
+            "+" => EvaluateAST(node.Left, valueRegistry) + EvaluateAST(node.Right, valueRegistry),
+            "-" => EvaluateAST(node.Left, valueRegistry) - EvaluateAST(node.Right, valueRegistry),
+            "*" => EvaluateAST(node.Left, valueRegistry) * EvaluateAST(node.Right, valueRegistry),
+            "/" => EvaluateAST(node.Left, valueRegistry) / EvaluateAST(node.Right, valueRegistry),
+            "^" => BigDouble.Pow(
+                EvaluateAST(node.Left, valueRegistry),
+                EvaluateAST(node.Right, valueRegistry)
+            ),
             _ => throw new ArgumentException($"Unknown operator: {node.Value}"),
         };
+    }
+
+    private static void CollectDependencies(Node node, HashSet<string> dependencies)
+    {
+        if (node == null)
+            return;
+
+        // 숫자가 아니고, 연산자나 함수도 아닌 경우 의존성으로 추가
+        if (
+            !double.TryParse(node.Value, out _)
+            && !IsOperator(node.Value)
+            && !IsFunction(node.Value)
+        )
+        {
+            dependencies.Add(node.Value);
+        }
+
+        // 재귀적으로 자식 노드들의 의존성도 수집
+        if (node.Parameters != null)
+        {
+            foreach (var param in node.Parameters)
+            {
+                CollectDependencies(param, dependencies);
+            }
+        }
+        else
+        {
+            CollectDependencies(node.Left, dependencies);
+            CollectDependencies(node.Right, dependencies);
+        }
     }
 
     private class Node
@@ -174,6 +246,6 @@ class ExpressionParser
         public string Value { get; set; }
         public Node Left { get; set; }
         public Node Right { get; set; }
-        public Node[] Parameters { get; set; }
+        public Node[] Parameters { get; set; } // 함수 파라미터용
     }
 }
