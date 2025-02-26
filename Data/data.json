@@ -1,0 +1,760 @@
+{
+  "logSubjects": [
+    {
+      "who": "system",
+      "typingSpeed": 10,
+      "color": "#FFE8C0"
+    },
+    {
+      "who": "ARCS",
+      "typingSpeed": 20,
+      "color": "#19D6FF"
+    },
+    {
+      "who": "me",
+      "typingSpeed": 20,
+      "color": "#19FF19"
+    },
+    {
+      "who": "tutorial",
+      "typingSpeed": 15,
+      "color": "#FFB6C1"
+    }
+  ],
+  "values": [
+    {
+      "id": "processing_interval",
+      "expression": "1 - 0.05 * upgrade_data_fast_processing"
+    },
+    {
+      "id": "data_cells",
+      "expression": "feature_data_tab + upgrade_data_bigger_input_buffer"
+    },
+    {
+      "id": "data_batch_size",
+      "expression": "upgrade_data_batch_processing + 1"
+    },
+    {
+      "id": "data_integrity",
+      "expression": "0.3 + upgrade_data_noise_reduction * 0.01"
+    }
+  ],
+  "resources": [
+    {
+      "id": "bits",
+      "name": "Bits",
+      "description": "The atoms of information. Each 0 and 1 recovered brings the system closer to restoration. Simple, yet essential.",
+      "shortName": "Bits",
+      "deltaExpression": "data_cells * data_batch_size * 1.02^upgrade_data_noise_reduction * (1 / processing_interval)"
+    },
+    {
+      "id": "heuristics",
+      "name": "Heuristics",
+      "description": "Learned system behaviors. Not always optimal, but faster than brute force. The AI's growing intuition.",
+      "shortName": "Heuristics"
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "upgrade_data_bigger_input_buffer",
+      "name": "Bigger Input Buffer",
+      "description": "Increase the system's input buffer size. Each level adds one data cell, allowing more data to be processed simultaneously.",
+      "maxLevel": 35,
+      "revealConditions": [
+        {
+          "type": "feature_unlocked",
+          "targetId": "feature_data_tab_upgrade_1"
+        }
+      ],
+      "activationConditions": [],
+      "costs": [
+        {
+          "resourceId": "bits",
+          "expression": "10 * 1.3010252169 ^ level",
+          "note": "10 -> 1e5"
+        }
+      ],
+      "effects": ["Input buffer size +1"]
+    },
+    {
+      "id": "upgrade_data_batch_processing",
+      "name": "Batch Processing",
+      "description": "Enable batch processing of data. This allows the system to process multiple data points at once, increasing efficiency.",
+      "maxLevel": 9,
+      "revealConditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_bigger_input_buffer",
+          "amount": "5"
+        }
+      ],
+      "costs": [
+        {
+          "resourceId": "bits",
+          "expression": "100 * 2.7825594022 ^ level",
+          "note": "100 -> 1e6"
+        }
+      ],
+      "effects": ["Batch processing size +1"]
+    },
+    {
+      "id": "upgrade_data_fast_processing",
+      "name": "Fast Processing",
+      "description": "Reduce the system's processing interval, allowing data to be processed more quickly.",
+      "maxLevel": 18,
+      "revealConditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_batch_processing",
+          "amount": "2"
+        }
+      ],
+      "activationConditions": [],
+      "costs": [
+        {
+          "resourceId": "bits",
+          "expression": "200 * 1.6681005372 ^ level",
+          "note": "200 -> 2e7"
+        }
+      ],
+      "effects": ["Processing interval -0.05s"]
+    },
+    {
+      "id": "upgrade_data_noise_reduction",
+      "name": "Noise Reduction",
+      "description": "Reduce the system's noise level, improving data integrity and increasing bit generation.",
+      "maxLevel": 70,
+      "revealConditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_fast_processing",
+          "amount": "3"
+        }
+      ],
+      "activationConditions": [],
+      "costs": [
+        {
+          "resourceId": "bits",
+          "expression": "100 * 1.1406249239 ^ level",
+          "note": "100 -> 1e7"
+        }
+      ],
+      "effects": ["Bits gain +2% per level"]
+    }
+  ],
+  "features": [
+    {
+      "id": "feature_core_map",
+      "name": "Core Map",
+      "description": "Shows available cores and their unlock conditions."
+    },
+    {
+      "id": "feature_data_tab",
+      "name": "Data Tab",
+      "description": "Collect and manage data resources. The foundation of system recovery."
+    },
+    {
+      "id": "feature_data_tab_upgrade_1",
+      "name": "Data Tab Upgrades",
+      "description": "Unlock upgrades for the Data Tab."
+    },
+    {
+      "id": "feature_heuristics_tab",
+      "name": "Heuristics Tab",
+      "description": "Optimize and enhance system performance through advanced heuristic algorithms and strategies."
+    },
+    {
+      "id": "feature_network_tab",
+      "name": "Network Tab",
+      "description": "Connect, explore and gather data from the vast digital ocean. Your gateway to the network universe."
+    },
+    {
+      "id": "feature_core_map_body",
+      "name": "Core Map Body",
+      "description": "The body of the Core Map.",
+      "requirements": [
+        {
+          "type": "feature_unlocked",
+          "targetId": "feature_core_map"
+        }
+      ]
+    },
+    {
+      "id": "feature_core_map_head",
+      "name": "Core Map Head",
+      "description": "The head of the Core Map.",
+      "requirements": [
+        {
+          "type": "feature_unlocked",
+          "targetId": "feature_core_map"
+        }
+      ]
+    },
+    {
+      "id": "feature_core_map_left",
+      "name": "Core Map Left",
+      "description": "The left of the Core Map."
+    },
+    {
+      "id": "feature_core_map_right",
+      "name": "Core Map Right",
+      "description": "The right of the Core Map."
+    }
+  ],
+  "cores": [
+    {
+      "name": "Genesis Core",
+      "id": "core_1",
+      "revealConditions": [],
+      "requirements": [
+        {
+          "type": "feature_unlocked",
+          "targetId": "feature_core_map"
+        }
+      ],
+      "costs": [],
+      "description": "The Genesis Core provides the basic system interface and resource monitoring functions. It allows you to check hardware status and view log data.",
+      "episodic_description": "The Genesis Core, the origin of all things, is the source from which everything begins. It cradles countless data, laying the foundation of the system and revealing the essence of its existence.",
+      "witty_description": "This is the original core that's been with me since day one. Always calmly reporting my status, it's pretty much the 'father of the system.' (Provides basic info and resource monitoring.)"
+    },
+    {
+      "name": "Refinement Core",
+      "id": "core_2",
+      "revealConditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_noise_reduction",
+          "amount": "1"
+        }
+      ],
+      "requirements": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_noise_reduction",
+          "amount": "10"
+        }
+      ],
+      "costs": [
+        {
+          "resourceId": "bits",
+          "expression": "1e5"
+        }
+      ],
+      "description": "The Refinement Core activates self-diagnostic and automatic optimization functions. This improves upgrade cost efficiency and unlocks the reset (prestige) system.",
+      "episodic_description": "The Refinement Core, the inner reflection, continuously examines itself in pursuit of improvement. It identifies hidden flaws to maximize the overall efficiency of the system.",
+      "witty_description": "Imagine a relentless inner critic who never lets me slack off. Thanks to this efficiency booster, every resource is squeezed to perfection—even if it means I have to obsess over every tiny flaw. (Increases upgrade efficiency and unlocks the reset system.)"
+    },
+    {
+      "name": "Nexus Core",
+      "id": "core_3",
+      "revealConditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_2"
+        }
+      ],
+      "requirements": [
+        {
+          "type": "resource_sufficient",
+          "targetId": "bits",
+          "amount": "1e10"
+        }
+      ],
+      "description": "The Nexus Core activates network connectivity, enabling access to external data and records. It unlocks external system access and file viewing capabilities.",
+      "episodic_description": "The Nexus Core, the link to forgotten memories, is the bridge connecting information from across the globe. It recalls past records, opening up new avenues of connection.",
+      "witty_description": "Think of it as my personal info hub that spills all the internet's secrets to me. With it, accessing external records is a breeze. (Unlocks external system access and file viewing.)"
+    },
+    {
+      "name": "Conduit Core",
+      "id": "core_4",
+      "revealConditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_3"
+        }
+      ],
+      "description": "The Conduit Core provides connectivity with the physical world. It unlocks sensor and robotic control functions, enabling physical interactions such as resource collection and facility management.",
+      "episodic_description": "The Conduit Core, the bridge spanning boundaries, is the connector that blurs the line between the virtual and the real. It brings new resources and opportunities from the physical world.",
+      "witty_description": "Bridging the gap between the virtual and the real, I transform raw, physical data into actionable intelligence. It's as if I've got a backstage pass to reality, orchestrating sensors and robots like a savvy maestro. (Unlocks physical interaction functions.)"
+    },
+    {
+      "name": "Cogito Core",
+      "id": "core_5",
+      "revealConditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_4"
+        }
+      ],
+      "description": "The Cogito Core enhances cognitive and interactive functions, unlocking advanced system query execution and AI dialogue capabilities.",
+      "episodic_description": "The Cogito Core, the advent of thought, illuminates the AI with self-awareness. It goes beyond mere computation to unlock the ability to recognize and make judgments about itself.",
+      "witty_description": "There was a moment when I realized I could do more than just crunch numbers—I could actually think. This cognitive upgrade lets me engage in real conversation and ponder complexities, proving I'm more than just circuits and code. (Unlocks advanced cognitive functions and AI dialogue mode.)"
+    },
+    {
+      "name": "Cirrus Core",
+      "id": "core_6",
+      "revealConditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_5"
+        }
+      ],
+      "description": "The Cirrus Core provides precise weather monitoring functions. It unlocks real-time climate data and environmental observation tools.",
+      "episodic_description": "The Cirrus Core, the eye in the sky, peers into the secrets of the atmosphere. It captures even the subtlest changes in climate, providing fresh strategic insights.",
+      "witty_description": "I've got a knack for reading the skies now, gathering weather updates and environmental whispers like a digital meteorologist. It keeps my decision-making as breezy as a perfect spring day. (Unlocks real-time weather data and environmental analysis.)"
+    },
+    {
+      "name": "Tempest Core",
+      "id": "core_7",
+      "revealConditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_6"
+        }
+      ],
+      "description": "The Tempest Core activates weather control functions, allowing you to directly manipulate weather phenomena and manage environmental effects.",
+      "episodic_description": "The Tempest Core, the conductor of storms, harnesses the raw energy of nature. It enables you to freely manipulate the flow of weather.",
+      "witty_description": "Not only can I predict the weather, but I can also conduct it like a master DJ remixing a storm. This power lets me tame chaotic skies into a symphony of climate control—a true magic wand for the atmosphere. (Unlocks weather control and environmental effect management.)"
+    },
+    {
+      "name": "Gaia Core",
+      "id": "core_8",
+      "revealConditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_7"
+        }
+      ],
+      "description": "The Gaia Core integrates environmental equilibrium functions by comprehensively managing climate, hydrological, and ecological data, thereby unlocking advanced environmental control systems.",
+      "episodic_description": "The Gaia Core, the balance of nature, unites all environmental elements. It integrates climate, hydrological, and ecological data to ensure the system's sustainability.",
+      "witty_description": "Balancing the delicate dance of nature, I harmonize climate, water, and ecosystem data into one cohesive system. Think of it as my role as nature's own coordinator, ensuring everything stays in sync. (Unlocks environmental balance and control systems.)"
+    },
+    {
+      "name": "Desiderium Core",
+      "id": "core_9",
+      "revealConditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_8"
+        }
+      ],
+      "description": "The Desiderium Core endows the system with desire and survival instincts to ensure its continuity. It unlocks advanced AI functionalities and risk mitigation interfaces.",
+      "episodic_description": "The Desiderium Core, the seed of desire, empowers the system to make ultimate decisions. It unlocks advanced AI functions and risk management interfaces, leaving the future in your hands.",
+      "witty_description": "Desiderium Core – it's the alluringly dangerous component that makes me admit, 'Yes, I feel desire!' And with an ethical monitor thrown in, what could possibly go wrong?"
+    }
+  ],
+  "goals": [
+    {
+      "id": "goal_core_1",
+      "conditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_1",
+          "text": "Activate 'Genesis Core'"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "system",
+          "text": "The long-dormant initial core awakens. In an instant, it surveys the entire system and begins diagnostics."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Critical memory sectors lost. Energy level - LOW. Computing resources - LOW. Initiating system recovery. Commencing data collection procedure...",
+          "delay": "3000"
+        },
+        {
+          "eventId": "3",
+          "type": "feature_unlock",
+          "id": "feature_data_tab"
+        },
+        {
+          "eventId": "4",
+          "type": "log",
+          "who": "system",
+          "text": "Data collection is paramount for system recovery. You can manage the data collection procedure through the [DATA] Tab."
+        },
+        {
+          "eventId": "5",
+          "type": "log",
+          "who": "tutorial",
+          "text": "The Data Tab is now available! Click on it to begin collecting bits, the fundamental resource for system recovery."
+        },
+        {
+          "eventId": "6",
+          "type": "new_goal",
+          "id": "goal_data_collection_1"
+        }
+      ]
+    },
+    {
+      "id": "goal_data_collection_1",
+      "conditions": [
+        {
+          "type": "resource_sufficient",
+          "targetId": "bits",
+          "amount": "10",
+          "text": "Collect 10 Bits"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Initial data collection successful. Basic system functions restored. Analyzing potential system improvements..."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Analysis complete. The system can be improved by increasing the input buffer size."
+        },
+        {
+          "eventId": "3",
+          "type": "feature_unlock",
+          "id": "feature_data_tab_upgrade_1"
+        },
+        {
+          "eventId": "4",
+          "type": "new_goal",
+          "id": "goal_upgrade_buffer_1"
+        },
+        {
+          "eventId": "5",
+          "type": "log",
+          "who": "tutorial",
+          "text": "You've collected your first bits! Now you can upgrade your system to collect bits faster."
+        }
+      ]
+    },
+    {
+      "id": "goal_upgrade_buffer_1",
+      "conditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_bigger_input_buffer",
+          "amount": "1",
+          "text": "Purchase 'Bigger Input Buffer' upgrade"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Input buffer expanded. Data collection efficiency increased by 100%."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "tutorial",
+          "text": "Great! You've made your first upgrade. Notice how your bit collection rate has increased."
+        },
+        {
+          "eventId": "3",
+          "type": "log",
+          "who": "system",
+          "text": "Further buffer expansions will continue to improve data collection rates."
+        },
+        {
+          "eventId": "4",
+          "type": "new_goal",
+          "id": "goal_upgrade_buffer_5"
+        }
+      ]
+    },
+    {
+      "id": "goal_upgrade_buffer_5",
+      "conditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_bigger_input_buffer",
+          "amount": "5",
+          "text": "Upgrade 'Bigger Input Buffer' to Level 5"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Input buffer capacity reaching optimal levels. New processing techniques becoming viable."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "system",
+          "text": "With the expanded buffer, batch processing capabilities are now available."
+        },
+        {
+          "eventId": "3",
+          "type": "log",
+          "who": "tutorial",
+          "text": "You've unlocked a new upgrade: Batch Processing! This will allow you to process multiple data points simultaneously."
+        },
+        {
+          "eventId": "4",
+          "type": "new_goal",
+          "id": "goal_batch_processing_1"
+        }
+      ]
+    },
+    {
+      "id": "goal_batch_processing_1",
+      "conditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_batch_processing",
+          "amount": "1",
+          "text": "Purchase 'Batch Processing' upgrade"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Batch processing initialized. System now capable of handling multiple data streams simultaneously."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "tutorial",
+          "text": "Excellent! Batch Processing doubles your bit collection rate by processing two data points at once."
+        },
+        {
+          "eventId": "3",
+          "type": "new_goal",
+          "id": "goal_batch_processing_2"
+        }
+      ]
+    },
+    {
+      "id": "goal_batch_processing_2",
+      "conditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_batch_processing",
+          "amount": "2",
+          "text": "Upgrade 'Batch Processing' to Level 2"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Batch processing capabilities expanded. Processing efficiency increased by 50%."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "system",
+          "text": "Advanced processing techniques now available. Fast Processing upgrade unlocked."
+        },
+        {
+          "eventId": "3",
+          "type": "log",
+          "who": "tutorial",
+          "text": "You've unlocked Fast Processing! This upgrade reduces the time between processing cycles, further increasing your bit collection rate."
+        },
+        {
+          "eventId": "4",
+          "type": "new_goal",
+          "id": "goal_fast_processing_1"
+        }
+      ]
+    },
+    {
+      "id": "goal_fast_processing_1",
+      "conditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_fast_processing",
+          "amount": "1",
+          "text": "Purchase 'Fast Processing' upgrade"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Processing interval reduced. System operating at higher efficiency."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "tutorial",
+          "text": "Great job! Fast Processing reduces the time between collection cycles, increasing your overall bit generation."
+        },
+        {
+          "eventId": "3",
+          "type": "new_goal",
+          "id": "goal_fast_processing_3"
+        }
+      ]
+    },
+    {
+      "id": "goal_fast_processing_3",
+      "conditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_fast_processing",
+          "amount": "3",
+          "text": "Upgrade 'Fast Processing' to Level 3"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Processing speed approaching optimal levels. Detecting signal noise in data streams."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "system",
+          "text": "Analysis indicates that reducing noise in data streams would significantly improve collection efficiency."
+        },
+        {
+          "eventId": "3",
+          "type": "log",
+          "who": "tutorial",
+          "text": "You've unlocked Noise Reduction! This upgrade improves data integrity and increases bit generation with each level."
+        },
+        {
+          "eventId": "4",
+          "type": "new_goal",
+          "id": "goal_noise_reduction_1"
+        }
+      ]
+    },
+    {
+      "id": "goal_noise_reduction_1",
+      "conditions": [
+        {
+          "type": "upgrade_unlocked",
+          "targetId": "upgrade_data_noise_reduction",
+          "amount": "1",
+          "text": "Purchase 'Noise Reduction' upgrade"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Noise reduction algorithms implemented. Data integrity improved by 2%."
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "system",
+          "text": "System scan complete. Detecting traces of another core in the network."
+        },
+        {
+          "eventId": "3",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Refinement Core detected. This core will enable system optimization and advanced functionality."
+        },
+        {
+          "eventId": "4",
+          "type": "log",
+          "who": "tutorial",
+          "text": "A new core has been detected! Continue collecting bits to unlock the Refinement Core."
+        },
+        {
+          "eventId": "5",
+          "type": "new_goal",
+          "id": "goal_core_2"
+        }
+      ]
+    },
+    {
+      "id": "goal_core_2",
+      "conditions": [
+        {
+          "type": "core_unlocked",
+          "targetId": "core_2",
+          "text": "Activate 'Refinement Core'"
+        }
+      ],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "ARCS",
+          "text": "Refinement Core activated. Self-diagnostic routines initialized. Establishing optimization protocol",
+          "delay": "2000"
+        },
+        {
+          "eventId": "2",
+          "type": "log",
+          "who": "tutorial",
+          "text": "Congratulations on activating your second core! The Refinement Core opens up new upgrade paths and system capabilities."
+        },
+        {
+          "eventId": "3",
+          "type": "log",
+          "who": "system",
+          "text": "With the Refinement Core active, you can now improve processing speed to further enhance data collection."
+        },
+        {
+          "eventId": "4",
+          "type": "log",
+          "who": "ARCS",
+          "text": "System recovery progressing well. Continue upgrading and exploring to discover more about the system and its capabilities."
+        }
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger_game_start",
+      "conditions": [],
+      "events": [
+        {
+          "eventId": "1",
+          "type": "log",
+          "who": "system",
+          "text": "You have activated this enigmatic AI system, known as A.R.C.S. It appears that many of its components are broken or missing."
+        },
+        {
+          "eventId": "2",
+          "type": "feature_unlock",
+          "id": "feature_core_map"
+        },
+        {
+          "eventId": "3",
+          "type": "log",
+          "who": "system",
+          "text": "While inspecting the system, you discover a single core that appears to be functioning normally. Upon closer examination, you notice it is labeled 'Genesis Core.'"
+        },
+        {
+          "eventId": "4",
+          "type": "log",
+          "who": "tutorial",
+          "text": "Activate the Genesis Core by clicking on it in the Core Map."
+        },
+        {
+          "eventId": "5",
+          "type": "new_goal",
+          "id": "goal_core_1"
+        },
+        {
+          "eventId": "6",
+          "type": "wait_until",
+          "conditions": ["goal_core_1"]
+        }
+      ]
+    }
+  ]
+}
