@@ -1,6 +1,7 @@
-import { Decimal } from 'decimal.js';
-import { Value, FormulaValue, ConditionValue, ResourceValue } from './Value';
-import { ExpressionParser, ParseResult } from './ExpressionParser';
+import { Decimal } from "decimal.js";
+import { Value, FormulaValue, ConditionValue, ResourceValue } from "./Value";
+import { ExpressionParser } from "./ExpressionParser";
+import { UpgradeData } from "@/base/GameData";
 
 export class ValueRegistry {
   private values: Map<string, Value> = new Map();
@@ -8,6 +9,10 @@ export class ValueRegistry {
 
   get Values(): Map<string, Value> {
     return this.values;
+  }
+
+  get Dependencies(): Map<string, Set<string>> {
+    return this.dependencies;
   }
 
   private getDependencies(valueId: string): Set<string> {
@@ -47,9 +52,11 @@ export class ValueRegistry {
     }
 
     const result = ExpressionParser.parseWithDependencies(expression);
-    const formulaValue = new FormulaValue(valueId, result.function);
+    const formulaValue = new FormulaValue(valueId, result.function, expression);
     console.log(
-      `Adding formula ${valueId} with dependencies ${Array.from(result.dependencies).join(', ')}`
+      `Adding formula ${valueId} with dependencies ${Array.from(
+        result.dependencies
+      ).join(", ")}`
     );
 
     for (const dependency of result.dependencies) {
@@ -78,7 +85,9 @@ export class ValueRegistry {
       onConditionMet
     );
     console.log(
-      `Adding condition ${valueId} with dependencies ${Array.from(result.dependencies).join(', ')}`
+      `Adding condition ${valueId} with dependencies ${Array.from(
+        result.dependencies
+      ).join(", ")}`
     );
 
     for (const dependency of result.dependencies) {
@@ -91,10 +100,10 @@ export class ValueRegistry {
 
   addResource(
     valueId: string,
-    deltaExpression = '0',
-    baseExpression = '0',
-    multExpression = '1',
-    flatExpression = '0'
+    deltaExpression = "0",
+    baseExpression = "0",
+    multExpression = "1",
+    flatExpression = "0"
   ): ResourceValue {
     console.log(`Adding resource ${valueId}`);
     this.addFormula(`${valueId}_delta`, deltaExpression);
@@ -121,7 +130,7 @@ export class ValueRegistry {
 
   printOutDependencies(): void {
     for (const [key, value] of this.dependencies) {
-      console.log(`${key} -> ${Array.from(value).join(', ')}`);
+      console.log(`${key} -> ${Array.from(value).join(", ")}`);
     }
   }
 
@@ -161,4 +170,4 @@ export class ValueRegistry {
 
     return true;
   }
-} 
+}

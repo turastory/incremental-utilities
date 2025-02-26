@@ -53,16 +53,24 @@ export class ConstantValue extends DependentValue {
 }
 
 export class FormulaValue extends DependentValue {
+  private readonly expressionString?: string;
+
   constructor(
     valueId: string,
-    private formula: (valueRegistry: ValueRegistry) => Decimal
+    private formula: (valueRegistry: ValueRegistry) => Decimal,
+    expressionString?: string
   ) {
     super(valueId);
+    this.expressionString = expressionString;
+  }
+
+  getExpression(): string | undefined {
+    return this.expressionString;
   }
 
   protected override computeValue(valueRegistry: ValueRegistry): Decimal {
     if (!this.formula) return new Decimal(0);
-    console.log(`Recomputing formula for ${this.valueId}`);
+    console.log(`Recomputing formula for ${this.valueId}, ${this.expressionString}`);
     return this.formula(valueRegistry);
   }
 }

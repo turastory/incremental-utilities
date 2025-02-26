@@ -2,12 +2,11 @@
   "name": "typescript",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "tura <soldier4443@gmail.com> (https://blog.turastory.com/)",
@@ -15,19 +14,23 @@
   "packageManager": "pnpm@10.2.0+sha512.0d27364e0139c6aadeed65ada153135e0ca96c8da42123bd50047f961339dc7a758fc2e944b428f52be570d1bd3372455c1c65fa2e7aa0bfbf931190f9552001",
   "devDependencies": {
     "@types/node": "^22.13.5",
-    "autoprefixer": "^10.4.20",
-    "nodemon": "^3.1.9",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.0.9",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
-  },
-  "dependencies": {
-    "@types/decimal.js": "^7.4.3",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.14",
+    "nodemon": "^3.1.9",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "vite": "^5.1.4"
+  },
+  "dependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/p5": "^1.7.6",
+    "d3": "^7.9.0",
     "decimal.js": "^10.5.0",
-    "next": "^15.1.7",
+    "p5": "^1.11.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }
